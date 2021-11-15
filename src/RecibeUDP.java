@@ -3,8 +3,16 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 
-public class RecibeUDP {
-    static String recibe(int puerto) {
+public class RecibeUDP extends Thread implements Runnable {
+	
+	private int puerto;
+	private String recepcion;
+	
+	public RecibeUDP(int puerto) {
+		this.puerto = puerto;
+	}
+	
+	public String recibe() {
         DatagramSocket socket;
         DatagramPacket paquete = null;
         byte paraRecibir[] = new byte[1024];
@@ -29,5 +37,14 @@ public class RecibeUDP {
         }
         return new String(paquete.getData()).trim();
     }
+	
+	public String getMensaje() {
+		return recepcion;
+	}
+	
+	@Override
+	public void run() {
+			recepcion = recibe();
+	}
 }
 
